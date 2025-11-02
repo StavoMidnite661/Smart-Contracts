@@ -1,7 +1,8 @@
 const hre = require("hardhat");
 
 async function main() {
-  console.log("Deploying VirtualCardBridge contract to Sepolia testnet...");
+  const network = hre.network.name;
+  console.log(`Deploying VirtualCardBridge contract to ${network}...`);
 
   const [deployer] = await hre.ethers.getSigners();
   console.log("Deploying with account:", deployer.address);
@@ -22,16 +23,16 @@ async function main() {
   console.log("VirtualCardBridge deployed to:", address);
   console.log("\nContract ABI saved for frontend integration");
   console.log("Verify on Etherscan:");
-  console.log(`npx hardhat verify --network sepolia ${address}`);
+  console.log(`npx hardhat verify --network ${network} ${address}`);
   
   // Save deployment info
   const fs = require("fs");
   const deploymentInfo = {
-    network: "sepolia",
+    network: network,
     contractAddress: address,
     deployer: deployer.address,
     timestamp: new Date().toISOString(),
-    chainId: 11155111
+    chainId: hre.network.config.chainId
   };
   
   fs.writeFileSync(
